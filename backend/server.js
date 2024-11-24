@@ -6,6 +6,8 @@ import authRoutes from './routes/authRoute.js'
 import cors from 'cors'
 import categoryRoutes from './routes/categoryRoutes.js'
 import productRoutes from './routes/productRoutes.js'
+import path from 'path'
+
 
 //rest object 
 const app = express()
@@ -25,16 +27,16 @@ app.use(morgan('dev'))
 app.use('/api/v1/auth',authRoutes)
 app.use('/api/v1/category',categoryRoutes)
 app.use('/api/v1/product',productRoutes)
+app.use(express.static(path.join(__dirname,'./client/build')))
 
 //rest api
-app.get('/',(req,res)=>{
-    res.send('<h1>hello world</h1>')
+app.get('*',function(req,res){
+    res.sendFile(path.join(__dirname,'./client/build/index.html'))
 })
 
 
 //port
-const PORT = process.env.PORT || 8080;
-
+const PORT = process.env.PORT || 5000;
 //run listen
 app.listen(8000,()=>{
     console.log(`server running on ${process.env.DEV_MODE} onport ${PORT}`)

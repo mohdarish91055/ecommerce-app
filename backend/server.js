@@ -6,10 +6,16 @@ import authRoutes from "./routes/authRoute.js";
 import cors from "cors";
 import categoryRoutes from "./routes/categoryRoutes.js";
 import productRoutes from "./routes/productRoutes.js";
+import cartRoute from "./routes/cartRoute.js";
 
 //rest object
 const app = express();
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    credentials: true,
+  })
+);
 
 //database config
 connectDB();
@@ -21,19 +27,20 @@ dotenv.config();
 app.use(express.json());
 app.use(morgan("dev"));
 
+//checking
+app.get("/", (req, res) => {
+  res.send("server is running");
+});
+
 //routes
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/category", categoryRoutes);
 app.use("/api/v1/product", productRoutes);
-
-//rest api
-// app.get('*',function(req,res){
-//     res.sendFile(path.join(__dirname,'./client/build/index.html'))
-// })
+app.use("/api/v1/cart", cartRoute);
 
 //port
 const PORT = process.env.PORT || 5000;
 //run listen
-app.listen(8000, () => {
-  console.log(`server running on ${process.env.DEV_MODE} onport ${PORT}`);
+app.listen(PORT, () => {
+  console.log(`server running on port ${PORT}`);
 });

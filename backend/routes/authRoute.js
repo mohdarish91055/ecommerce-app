@@ -1,44 +1,65 @@
-import express from 'express'
-import { registerController,loginController,testController,forgotPasswordController, updateProfileController, getOrdersController, getAllOrdersController, orderStatusController } from '../controller/authController.js'
-import {isAdmin, requireSignIn } from '../middleware/authMiddleware.js'
+import express from "express";
+import {
+  registerController,
+  loginController,
+  testController,
+  forgotPasswordController,
+  updateProfileController,
+  getOrdersController,
+  getAllOrdersController,
+  orderStatusController,
+  placeOrderController,
+  getAllUsers,
+} from "../controller/authController.js";
+import { isAdmin, requireSignIn } from "../middleware/authMiddleware.js";
 
 //router object
-const router = express.Router()
+const router = express.Router();
 
 //routing
 //register || method post
-router.post('/register', registerController)
+router.post("/register", registerController);
 
-//LOGIN  || POST 
-router.post('/login',loginController)
+//LOGIN  || POST
+router.post("/login", loginController);
 
 //forgot password
-router.post('/forgot-password',forgotPasswordController)
+router.post("/forgot-password", forgotPasswordController);
 
 //test routes
-router.get('/test',requireSignIn,isAdmin,testController)
+router.get("/test", requireSignIn, isAdmin, testController);
 
 //protected user route auth
-router.get('/user-auth',requireSignIn,(req,res)=>{
-    res.status(200).send({ok:true})
-})
+router.get("/user-auth", requireSignIn, (req, res) => {
+  res.status(200).send({ ok: true });
+});
 
 //protected Admin route auth
-router.get('/admin-auth',requireSignIn,isAdmin,(req,res)=>{
-    res.status(200).send({ok:true})
-})
+router.get("/admin-auth", requireSignIn, isAdmin, (req, res) => {
+  res.status(200).send({ ok: true });
+});
 
 //update profile
-router.put('/profile',requireSignIn,updateProfileController)
+router.put("/profile", requireSignIn, updateProfileController);
 
-//order 
-router.get('/orders',requireSignIn,getOrdersController)
+//order
+router.get("/orders", requireSignIn, getOrdersController);
 
-//all order 
-router.get('/all-orders',requireSignIn,isAdmin,getAllOrdersController)
+//place
+router.post("/order/place", requireSignIn, placeOrderController);
 
-//order status 
-router.put('/order-status/:orderId',requireSignIn,isAdmin,orderStatusController)
+//all order
+router.get("/all-orders", requireSignIn, isAdmin, getAllOrdersController);
 
-export default router
+//order status
+router.put(
+  "/order-status/:orderId",
+  requireSignIn,
+  isAdmin,
+  orderStatusController
+);
 
+//all user get for admin
+router.get("/all-users", requireSignIn, isAdmin, getAllUsers);
+
+export default router;

@@ -1,132 +1,197 @@
-import React,{useState} from 'react'
-import Layout from '../../components/Layout/Layout'
-import {toast} from 'react-toastify'
-import axios from 'axios'
-import {useNavigate} from 'react-router-dom'
+import React, { useState } from "react";
+import Layout from "../../components/Layout/Layout";
+import { toast } from "react-toastify";
+import api from "../../api/api.js";
+import { useNavigate } from "react-router-dom";
 
-const Register = ()=>{
-    const [name,setName] = useState('')
-    const [email,setEmail] = useState('')
-    const [password,setPassword] = useState('')
-    const [phone,setPhone] = useState('')
-    const [address,setAddress] = useState('')
-    const [answer,setAnswer] = useState('')
-    const navigate = useNavigate()
+const Register = () => {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+    phone: "",
+    address: "",
+    answer: "",
+  });
 
-    const handleSubmit = async (e)=>{
-        e.preventDefault()
-        try{
-            const res = await axios.post(`${process.env.REACT_APP_API}/api/v1/auth/register`,{name,email,password,phone,address,answer})
-            if(res.data.success){
-                toast.success(res.data.message)
-                setTimeout(()=>{
-                    navigate('/login')
-                })
-            }
-            else{
-                toast.error(res.data.message)
-            }
-        } catch(error){
-            console.log(error)
-            toast.error('Something went wrong')            
-        }
-       
+  const [errors, setErrors] = useState({});
+  const navigate = useNavigate();
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    const updatedData = { ...formData, [name]: value };
+    setFormData(updatedData);
+
+    const newErrors = { ...errors };
+
+    if (name === "name") {
+      if (value.trim() === "") {
+        newErrors.name = "Name is required";
+      } else if (value.trim().length < 3) {
+        newErrors.name = "Invalid name";
+      } else {
+        delete newErrors.name;
+      }
     }
 
-    return(
-        <Layout title={'Register'}>
-            <div className='register border'>
-               
-                <h1>Register Page</h1>
-            <form onSubmit={handleSubmit} className='form'>
-            <div className="mb-2">
-    
-            <input
-            type="text"
-            value={name}
-            onChange={(e)=>{setName(e.target.value)}}
-            className="form-control"
-            id="exampleInputEmail1"
-            placeholder='Enter Your Name'
-            required/>
-            </div>
+    if (name === "email") {
+      if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(value)) {
+        newErrors.email = "Invalid email format";
+      } else {
+        delete newErrors.email;
+      }
+    }
 
-            <div className="mb-2">
-   
+    if (name === "phone") {
+      if (!/^[6-9]\d{9}$/.test(value)) {
+        newErrors.phone = "Invalid mobile format";
+      } else {
+        delete newErrors.phone;
+      }
+    }
+
+    if (name === "password") {
+      const passwordRegex =
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@|+%&])[A-Za-z\d@|+%&]{6,}$/;
+      if (!passwordRegex.test(value)) {
+        newErrors.password = "Invalid password";
+      } else {
+        delete newErrors.password;
+      }
+    }
+
+    if (name === "address") {
+      if (value.trim() === "") {
+        newErrors.address = "Address is required";
+      } else if (value.trim().length < 10) {
+        newErrors.address = "Address must be complete";
+      } else {
+        delete newErrors.address;
+      }
+    }
+
+    setErrors(newErrors);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await api.post(`/api/v1/auth/register`, formData);
+      if (res.data.success) {
+        toast.success(res.data.message);
+        navigate("/login");
+      } else {
+        toast.error(res.data.message);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Something went wrong");
+    }
+  };
+
+  return (
+    <Layout title={"Register"}>
+      <div className="register border">
+        <h1>Register Page</h1>
+        <form onSubmit={handleSubmit} className="form">
+          <div className="mb-2">
             <input
-            type="email"
-            value={email}
-            onChange={(e)=>{setEmail(e.target.value)}}
-            className="form-control"
-            id="exampleInputEmail1"
-            placeholder='Enter Your Email'
-            required
+              type="text"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+              className="form-control"
+              placeholder="Enter Your Name"
+              required
             />
-             </div>
+            {errors.name && <p style={{ color: "red" }}>{errors.name}</p>}
+          </div>
 
-            <div className="mb-2">
-   
+          <div className="mb-2">
             <input
-            type="password"
-            value={password}
-            onChange={(e)=>{setPassword(e.target.value)}}
-            className="form-control"
-            id="exampleInputPassword1"
-            placeholder='Enter Your Password'
-            required
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              className="form-control"
+              placeholder="Enter Your Email"
+              required
             />
-            </div>
+            {errors.email && <p style={{ color: "red" }}>{errors.email}</p>}
+          </div>
 
-            <div className="mb-2">
-    
+          <div className="mb-2">
             <input
-            type="text"
-            value={phone}
-            onChange={(e)=>{setPhone(e.target.value)}}
-            className="form-control"
-            id="exampleInputEmail1"
-            placeholder='Enter Your Phone'
-            required
+              type="password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              className="form-control"
+              placeholder="Enter Your Password"
+              required
             />
-    
-            </div>
+            {errors.password && (
+              <p
+                style={{
+                  color: "red",
+                  minHeight: "20px",
+                  margin: "0.25rem 0 0",
+                }}
+              >
+                {errors.password}
+              </p>
+            )}
+          </div>
 
-            <div className="mb-2">
-    
+          <div className="mb-2">
             <input
-            type="text"
-            value={address}
-            onChange={(e)=>{setAddress(e.target.value)}}
-            className="form-control"
-            id="exampleInputEmail1"
-            placeholder='Enter Your Address'
-            required
+              type="text"
+              name="phone"
+              value={formData.phone}
+              onChange={handleChange}
+              className="form-control"
+              placeholder="Enter Your Phone"
+              required
             />
-    
-            </div>
+            {errors.phone && <p style={{ color: "red" }}>{errors.phone}</p>}
+          </div>
 
-            <div className="mb-3">
-    
+          <div className="mb-2">
             <input
-            type="text"
-            value={answer}
-            onChange={(e)=>{setAnswer(e.target.value)}}
-            className="form-control"
-            id="exampleInputEmail1"
-            placeholder='Favorite Sports Name'
-            required
+              type="text"
+              name="address"
+              value={formData.address}
+              onChange={handleChange}
+              className="form-control"
+              placeholder="Enter Your Address"
+              required
             />
+            {errors.address && <p style={{ color: "red" }}>{errors.address}</p>}
+          </div>
 
-    </div>
+          <div className="mb-3">
+            <input
+              type="text"
+              name="answer"
+              value={formData.answer}
+              onChange={handleChange}
+              className="form-control"
+              placeholder="Favorite Sports Name"
+              required
+            />
+          </div>
 
-  <button type="submit" className="btn btn-primary">
-    Submit
-  </button>
-</form>
-</div>
-            
-        </Layout>
-    )
-}
+          <button
+            type="submit"
+            disabled={Object.keys(errors).length > 0}
+            className="btn btn-primary"
+          >
+            Submit
+          </button>
+        </form>
+      </div>
+    </Layout>
+  );
+};
 
-export default Register
+export default Register;

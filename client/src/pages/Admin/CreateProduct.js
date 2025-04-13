@@ -1,166 +1,207 @@
-import React ,{useState,useEffect} from 'react'
-import Layout from '../../components/Layout/Layout'
-import AdminMenu from '../../components/Layout/AdminMenu'
-import { toast } from 'react-toastify'
-import axios from 'axios'
-import { Select } from 'antd'
-import { floatButtonPrefixCls } from 'antd/es/float-button/FloatButton'
-import {useNavigate} from 'react-router-dom'
-const {Option} = Select
+import React, { useState, useEffect } from "react";
+import Layout from "../../components/Layout/Layout";
+import AdminMenu from "../../components/Layout/AdminMenu";
+import { toast } from "react-toastify";
+import { Select } from "antd";
+import { useNavigate } from "react-router-dom";
+import API from "../../api/api";
+import axios from "axios";
+const { Option } = Select;
 
 export default function CreateProduct() {
-  const [categories,setCategories] = useState([])
-  const [name,setName] = useState("")
-  const [description,setDescription] = useState("")
-  const [price,setPrice] = useState("")
-  const [category,setCategory] = useState("")
-  const [quantity,setQuantity] = useState("")
-  const [shipping,setShipping] = useState("")
-  const [photo,setPhoto] = useState(null)
-  const navigate = useNavigate()
-
+  const [categories, setCategories] = useState([]);
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [price, setPrice] = useState("");
+  const [category, setCategory] = useState("");
+  const [quantity, setQuantity] = useState("");
+  const [shipping, setShipping] = useState("");
+  const [photo, setPhoto] = useState(null);
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   //get all category
-  const getAllCategory = async()=>{
-    try{
-      const {data} = await axios.get(`${process.env.REACT_APP_API}/api/v1/category/get-category`)
-      if(data.success){
-        setCategories(data.category)
-       
+  const getAllCategory = async () => {
+    try {
+      const { data } = await API.get(`/api/v1/category/get-category`);
+      if (data.success) {
+        setCategories(data.category);
       }
+    } catch (error) {
+      console.log(error);
+      toast.error("something went worng in getting category");
     }
-    catch(error)
-    {
-      console.log(error)
-      toast.error('something went worng in getting category')
-    }
-  }
+  };
 
-  useEffect(()=>{
-    getAllCategory()
-  },[])
+  useEffect(() => {
+    getAllCategory();
+  }, []);
 
   //handleCreate
 
-  const handleCreate = async(e)=>{
-    e.preventDefault()
-    try{
-      const productData = new FormData()
-      productData.append("name",name)
-      productData.append("description",description)
-      productData.append("price",price)
-      productData.append("quantity",quantity)
-      productData.append("category",category)
-      productData.append("photo",photo)
-      const {data} = axios.post(`${process.env.REACT_APP_API}/api/v1/product/create-product`,productData)
-      if(data?.success){
-        toast.error(data.message)
-      }
-      else{
-       
-        toast.success('Product Created Successfully')
-        setTimeout(() => {
-          navigate('/dashboard/admin/products')
-        }, 2000);
-      }
-    }
-    catch(error){
-      console.log(error)
-      toast.error('something went wrong')
-    }
-  }
+  const handleCreate = async (e) => {
+    setLoading(true);
+    e.preventDefault();
+    try {
+      const productData = new FormData();
+      productData.append("name", name);
+      productData.append("description", description);
+      productData.append("price", price);
+      productData.append("quantity", quantity);
+      productData.append("category", category);
+      productData.append("photo", photo);
+      productData.append("shipping", shipping);
 
+      const { data } = await API.post(
+        `api/v1/product/create-product`,
+        productData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      console.log(data);
+      toast.success("Product Created Successfully");
+      navigate("/dashboard/admin/products");
+    } catch (error) {
+      console.log(error);
+      toast.error("something went wrong");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
-    <Layout title={'dashboard-create product'}>
-        <div className='container-fluid m-3 p-3'>
-        <div className='row'>
-        <div className='col-md-3'>
-            <AdminMenu/>
-        </div>
-        <div className='col-md-9'>
+    <Layout title={"dashboard-create product"}>
+      <div className="container-fluid m-3 p-3">
+        <div className="row">
+          <div className="col-md-3">
+            <AdminMenu />
+          </div>
+          <div className="col-md-9">
             <h1>Create Product</h1>
-            <div className='m-1 w-75'>
-            
+            <div className="m-1 w-75">
+              <Select
+                bordered={false}
+                placeholder="Select a category"
+                size="large"
+                showSearch
+                className="form-select mb-3"
+                onChange={(value) => setCategory(value)} // Use category _id as value
+                value={category} // Keep the selected category _id in the state
+              >
+                {categories?.map((c) => (
+                  <Option key={c._id} value={c._id}>
+                    {" "}
+                    {/* Use _id as the value */}
+                    {c.name} {/* Display category name */}
+                  </Option>
+                ))}
+              </Select>
+
+              <div className="mb-3">
+                <label className="btn btn-outline-secondary col-md-12">
+                  {photo ? photo.name : "Upload Photo"}{" "}
+                  {/* Display file name if selected, otherwise show default text */}
+                  <input
+                    type="file"
+                    name="photo"
+                    accept="image/*"
+                    onChange={(e) => setPhoto(e.target.files[0])} // Update state with selected file
+                    hidden // Hide the input element itself
+                  />
+                </label>
+              </div>
+              <div className="mb-3">
+                {photo && (
+                  <div className="text-center">
+                    <img
+                      src={URL.createObjectURL(photo)}
+                      alt="product photo"
+                      height={"200px"}
+                      className="img img-responsive"
+                    />
+                  </div>
+                )}
+              </div>
+
+              <div className="mb-3">
+                <input
+                  type="text"
+                  value={name}
+                  placeholder="write a name"
+                  className="form-control"
+                  onChange={(e) => {
+                    setName(e.target.value);
+                  }}
+                />
+              </div>
+
+              <div className="mb-3">
+                <textarea
+                  type="text"
+                  value={description}
+                  placeholder="write a description"
+                  className="form-control"
+                  onChange={(e) => {
+                    setDescription(e.target.value);
+                  }}
+                />
+              </div>
+
+              <div className="mb-3">
+                <input
+                  type="number"
+                  value={price}
+                  placeholder="write a price"
+                  className="form-control"
+                  onChange={(e) => {
+                    setPrice(e.target.value);
+                  }}
+                />
+              </div>
+
+              <div className="mb-3">
+                <input
+                  type="number"
+                  value={quantity}
+                  placeholder="write a quantity"
+                  className="form-control"
+                  onChange={(e) => {
+                    setQuantity(e.target.value);
+                  }}
+                />
+              </div>
+
+              <div className="mb-3">
                 <Select
                   bordered={false}
-                  placeholder="Select a category"
+                  placeholder="Selecting Shipping"
                   size="large"
                   showSearch
                   className="form-select mb-3"
-                  onChange={(value) => setCategory(value)}  // Use category _id as value
-                  value={category}  // Keep the selected category _id in the state
+                  onChange={(value) => {
+                    setShipping(value);
+                  }}
                 >
-                  {categories?.map((c) => (
-                    <Option key={c._id} value={c._id}>  {/* Use _id as the value */}
-                      {c.name}  {/* Display category name */}
-                    </Option>
-                  ))}
+                  <Option value="0">No</Option>
+                  <Option value="1">Yes</Option>
                 </Select>
-              
-                <div className='mb-3'>
-                <label  className="btn btn-outline-secondary col-md-12">
-          {photo ? photo.name : "Upload Photo"} {/* Display file name if selected, otherwise show default text */}
-          <input
-            type="file"
-            name="photo"
-            accept="image/*"
-            onChange={(e) => setPhoto(e.target.files[0])} // Update state with selected file
-            hidden  // Hide the input element itself
-          />
-        </label>
-                </div>
-                <div className='mb-3'>
-                  {photo && (
-                    <div className='text-center'>
-                      <img src={URL.createObjectURL(photo)} alt="product photo" height={'200px'} className='img img-responsive'/>
-                    </div> 
-                  )}
-                </div>
-
-                <div className='mb-3'>
-                  <input type='text' value={name} placeholder='write a name' className='form-control'
-                      onChange={(e)=>{setName(e.target.value)}}
-                  />
-                </div>
-
-                <div className='mb-3'>
-                  <textarea type='text' value={description} placeholder='write a description' className='form-control'
-                      onChange={(e)=>{setDescription(e.target.value)}}
-                  />
-                </div>
-
-                <div className='mb-3'>
-                  <input type='number' value={price} placeholder='write a price' className='form-control'
-                      onChange={(e)=>{setPrice(e.target.value)}}
-                  />
-                </div>
-
-                <div className='mb-3'>
-                  <input type='number' value={quantity} placeholder='write a quantity' className='form-control'
-                      onChange={(e)=>{setQuantity(e.target.value)}}
-                  />
-                </div>
-
-                <div className='mb-3'>
-                    <Select
-                      bordered={false}
-                      placeholder="Selecting Shipping"
-                      size='large'
-                      showSearch
-                      className='form-select mb-3'
-                      onChange={(value)=>{setShipping(value)}}>
-                        <Option value="0">No</Option>
-                        <Option value="1">Yes</Option>
-                    </Select>
-                </div>
-                <div className='mb-3'>
-                  <button className='btn btn-primary' onClick={handleCreate}>CREATE PRODUCT</button>
-                </div>
+              </div>
+              <div className="mb-3">
+                <button
+                  className="btn btn-primary"
+                  disabled={loading}
+                  onClick={handleCreate}
+                >
+                  {loading ? "Creating" : "CREATE PRODUCT"}
+                </button>
+              </div>
             </div>
+          </div>
         </div>
-    </div>
-    </div>
+      </div>
     </Layout>
-  )
+  );
 }

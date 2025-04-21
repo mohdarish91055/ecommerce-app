@@ -48,9 +48,7 @@ const Policy = () => {
             do not sell your data and only share it with essential service
             providers such as shipping partners. Our website uses cookies to
             enhance your browsing experience, and you can manage these through
-            your browser settings. You have the right to access, update, or
-            delete your personal data and can contact us at
-            <emp>arishsaifi91055@gmail.com</emp>.
+            your browser settings.
           </p>
         </div>
       </div>

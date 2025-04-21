@@ -10,7 +10,7 @@ const Policy = () => {
           <img
             src={privacy}
             alt="privacy and policy"
-            style={{ width: "100%" }}
+            style={{ width: "100%", margin: "20px" }}
           />
         </div>
         <div className="col-md-4">

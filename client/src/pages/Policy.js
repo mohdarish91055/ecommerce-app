@@ -1,5 +1,6 @@
 import React from "react";
 import Layout from "../components/Layout/Layout";
+import privacy from "../image/privacy.png";
 
 const Policy = () => {
   return (
@@ -7,7 +8,7 @@ const Policy = () => {
       <div className="row policy">
         <div className="col-md-6">
           <img
-            src="client\src\image\download.png"
+            src={privacy}
             alt="privacy and policy"
             style={{ width: "100%" }}
           />

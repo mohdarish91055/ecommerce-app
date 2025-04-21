@@ -7,7 +7,7 @@ const About = () => {
       <div className="row about">
         <div className="col-md-6">
           <img
-            src="D:\ecommerce-app\client\src\image\download.jpg"
+            src="client\src\image\about.jpg"
             alt="about"
             style={{ width: "100%" }}
           />

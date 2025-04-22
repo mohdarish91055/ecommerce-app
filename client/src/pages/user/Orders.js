@@ -42,7 +42,6 @@ function Orders() {
                         <th scope="col">#</th>
                         <th scope="col">Status</th>
                         <th scope="col">Buyer</th>
-
                         <th scope="col">Payment</th>
                         <th scope="col">Quantity</th>
                       </tr>
@@ -71,8 +70,17 @@ function Orders() {
                           </div>
                           <div className="col-md-8">
                             <p>{p.name}</p>
-                            <p>{p.description.substring(0, 30)}</p>
                             <p>Price : {p.price}</p>
+                            <p>
+                              {p?.status !== "Delivered" && (
+                                <button
+                                  className="btn btn-danger btn-sm"
+                                  onClick={() => handleCancelOrder(o._id)}
+                                >
+                                  Cancel Order
+                                </button>
+                              )}
+                            </p>
                           </div>
                         </div>
                       ))}

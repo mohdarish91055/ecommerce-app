@@ -52,6 +52,11 @@ function Orders() {
                         <td>{o?.buyer?.name}</td>
                         <td>{o?.payment.method ? "Cash on Delivery" : ""}</td>
                         <td>{o?.products?.length}</td>
+                        <td>
+                          {o?.success !== "Delivered" && (
+                            <button>Cancel Order</button>
+                          )}
+                        </td>
                       </tr>
                     </tbody>
 

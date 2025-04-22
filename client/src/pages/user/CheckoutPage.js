@@ -12,8 +12,6 @@ const CheckoutPage = () => {
   const [paymentMethod, setPaymentMethod] = useState("cod");
   const navigate = useNavigate();
 
-  console.log(auth.token);
-
   const totalAmount = cart.reduce(
     (total, item) => total + item.product.price * item.quantity,
     0
@@ -21,8 +19,15 @@ const CheckoutPage = () => {
 
   const handlePlaceOrder = async () => {
     try {
+      const orderItems = cart.map((item) => ({
+        product: item.product._id,
+        name: item.product.name,
+        price: item.product.price,
+        quantity: item.quantity,
+      }));
+
       const { data } = await API.post(`/api/v1/auth/order/place`, {
-        items: cart,
+        items: orderItems,
         totalAmount,
         shippingAddress: auth?.user?.address,
         paymentMethod,

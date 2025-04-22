@@ -23,7 +23,7 @@ const CheckoutPage = () => {
         product: item.product._id,
         name: item.product.name,
         price: item.product.price,
-        quantity: item.quantity,
+        image: item.product.image,
       }));
 
       const { data } = await API.post(`/api/v1/auth/order/place`, {

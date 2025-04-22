@@ -20,7 +20,7 @@ const CheckoutPage = () => {
   const handlePlaceOrder = async () => {
     try {
       const { data } = await API.post(`/api/v1/auth/order/place`, {
-        items: item,
+        items: cart,
         totalAmount,
         shippingAddress: auth?.user?.address,
         paymentMethod,

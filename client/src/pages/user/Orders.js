@@ -22,6 +22,8 @@ function Orders() {
     if (auth?.token) getOrders();
   }, [auth?.token]);
 
+  const handleCancelOrder = () => {};
+
   return (
     <Layout title={"your orders"}>
       <div className="container-flui p-3 m-3">
@@ -53,8 +55,13 @@ function Orders() {
                         <td>{o?.payment.method ? "Cash on Delivery" : ""}</td>
                         <td>{o?.products?.length}</td>
                         <td>
-                          {o?.success !== "Delivered" && (
-                            <button>Cancel Order</button>
+                          {o?.status !== "Delivered" && (
+                            <button
+                              className="btn btn-danger"
+                              onClick={() => handleCancelOrder(o._id)}
+                            >
+                              Cancel Order
+                            </button>
                           )}
                         </td>
                       </tr>

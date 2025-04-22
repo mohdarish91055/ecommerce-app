@@ -54,6 +54,16 @@ function Orders() {
                         <td>{o?.buyer?.name}</td>
                         <td>{o?.payment.method ? "Cash on Delivery" : ""}</td>
                         <td>{o?.products?.length}</td>
+                        <td>
+                          {o?.status !== "Delivered" && (
+                            <button
+                              className="btn btn-danger"
+                              onClick={() => handleCancelOrder(o?._id)}
+                            >
+                              Cancel Order
+                            </button>
+                          )}
+                        </td>
                       </tr>
                     </tbody>
 

@@ -14,7 +14,7 @@ app.use(
   cors({
     origin: [
       "http://localhost:3000",
-      "https://ecommerce-app-1-v6gy.onrender.com",
+      "https://ecommerce-app-1-lf5q.onrender.com",
     ],
     credentials: true,
   })

@@ -19,15 +19,8 @@ const CheckoutPage = () => {
 
   const handlePlaceOrder = async () => {
     try {
-      const orderItems = cart.map((item) => ({
-        product: item.product._id,
-        name: item.product.name,
-        price: item.product.price,
-        image: item.product.image,
-      }));
-
       const { data } = await API.post(`/api/v1/auth/order/place`, {
-        items: orderItems,
+        items: item,
         totalAmount,
         shippingAddress: auth?.user?.address,
         paymentMethod,

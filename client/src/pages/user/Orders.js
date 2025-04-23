@@ -26,8 +26,8 @@ function Orders() {
   const handleCancelOrder = async (orderId) => {
     try {
       const { data } = await API.put(
-        `/api/v1/orders/cancel-order/${orderId}`,
-
+        `/api/v1/auth/cancel-order/${orderId}`,
+        {},
         {
           headers: {
             Authorization: `Bearer ${auth.token}`,

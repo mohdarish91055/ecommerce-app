@@ -19,7 +19,7 @@ const productSchema = new mongoose.Schema(
       required: true,
     },
     category: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: mongoose.ObjectId,
       ref: "Category",
       required: true,
     },
@@ -29,9 +29,7 @@ const productSchema = new mongoose.Schema(
     },
     photo: {
       data: Buffer,
-      contentType: {
-        type: String, // The type of the photo (like image/jpeg or image/png)
-      },
+      contentType: String,
     },
     shipping: {
       type: Boolean,

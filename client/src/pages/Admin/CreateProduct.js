@@ -5,7 +5,6 @@ import { toast } from "react-toastify";
 import { Select } from "antd";
 import { useNavigate } from "react-router-dom";
 import API from "../../api/api";
-import axios from "axios";
 const { Option } = Select;
 
 export default function CreateProduct() {

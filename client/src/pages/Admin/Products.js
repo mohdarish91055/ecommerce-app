@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import AdminMenu from "../../components/Layout/AdminMenu";
 import Layout from "../../components/Layout/Layout";
 import { toast } from "react-toastify";
-import axios from "axios";
 import { Link } from "react-router-dom";
+import API from "../../api/api";
 
 const Products = () => {
   const [products, setProducts] = useState();
@@ -11,9 +11,7 @@ const Products = () => {
   //get all products
   const getAllProducts = async () => {
     try {
-      const { data } = await axios.get(
-        `${process.env.REACT_APP_API}/api/v1/product/get-product`
-      );
+      const { data } = await API.get(`/api/v1/product/get-product`);
       setProducts(data.products);
     } catch (error) {
       console.log(error);

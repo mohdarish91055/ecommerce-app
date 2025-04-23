@@ -20,23 +20,6 @@ const HomePage = () => {
   const [loading, setLoading] = useState(false);
   const [auth, setAuth] = useAuth();
 
-  // Handle Add to Cart
-  // const handleAddToCart = (product) => {
-  //   if (!auth?.user) {
-  //     toast.error("Please log in to add items to your cart");
-  //     navigate("/login");
-  //     return;
-  //   }
-
-  //   const cartItem = { ...product, userId: auth.user.id };
-
-  //   const updatedCart = [...cart, cartItem];
-  //   setCart(updatedCart);
-  //   console.log(cart);
-  //   localStorage.setItem("cart", JSON.stringify([...cart, product]));
-  //   toast.success("Item added to cart");
-  // };
-
   const handleAddToCart = async (product) => {
     const cartItem = { ...product, userId: auth.user._id }; // assuming `_id` is user id
 
@@ -95,10 +78,10 @@ const HomePage = () => {
   //get products
   const getAllProducts = async () => {
     try {
-      // setLoading(true);
-      const { data } = await API.get(`/api/v1/product/get-product`);
-      // setLoading(false)
-      setProuducts(data.products);
+      setLoading(true);
+      const { data } = await API.get(`/api/v1/product/product-list/${page}`);
+      setLoading(false);
+      setProuducts((prev) => [...prev, ...data.products]);
       console.log("cart", cart);
     } catch (error) {
       setLoading(false);
@@ -128,8 +111,10 @@ const HomePage = () => {
   };
 
   useEffect(() => {
-    if (!checked.length || !radio.length) getAllProducts();
-  }, [checked.length, radio.length]);
+    if (!checked.length && !radio.length) {
+      getAllProducts();
+    }
+  }, [page]);
 
   useEffect(() => {
     if (checked.length || radio.length) filterProduct();
@@ -235,6 +220,13 @@ const HomePage = () => {
           </div>
         </div>
       </div>
+      {products.length < total && !checked.length && !radio.length && (
+        <div className="m-2 p-3 text-center">
+          <button className="btn btn-warning" onClick={() => setPage(page + 1)}>
+            {loading ? "Loading..." : "Load More"}
+          </button>
+        </div>
+      )}
     </Layout>
   );
 };

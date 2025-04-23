@@ -138,24 +138,24 @@ export const deleteProductController = async (req, res) => {
 //update
 export const updateProductController = async (req, res) => {
   try {
-    const { name, description, price, category, quantity } = req.fields;
+    const { name, descripton, price, category, quantity } = req.fields;
     const { photo } = req.files;
 
     //validation
     switch (true) {
       case !name:
-        return res.status(500).send({ error: "name is required" });
+        return res.status(400).send({ error: "name is required" });
       case !description:
-        return res.status(500).send({ error: "description is required" });
+        return res.status(400).send({ error: "description is required" });
       case !price:
-        return res.status(500).send({ error: "price is required" });
+        return res.status(400).send({ error: "price is required" });
       case !category:
-        return res.status(500).send({ error: "category is required" });
+        return res.status(400).send({ error: "category is required" });
       case !quantity:
-        return res.status(500).send({ error: "quantity is required" });
+        return res.status(400).send({ error: "quantity is required" });
       case photo && photo.size > 1000000:
         return res
-          .status(500)
+          .status(400)
           .send({ error: "photo should be required less than 1mb" });
     }
     const products = await productModel.findByIdAndUpdate(
@@ -169,16 +169,16 @@ export const updateProductController = async (req, res) => {
     }
 
     await products.save();
-    res.status(201).send({
+    res.status(200).send({
       success: true,
-      message: "product update successful",
+      message: "product update successfully",
       products,
     });
   } catch (error) {
     console.log(error);
     res.status(500).send({
       success: false,
-      message: "error in update",
+      message: "error in product update",
       error,
     });
   }

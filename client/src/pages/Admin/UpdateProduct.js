@@ -72,11 +72,11 @@ const UpdateProduct = () => {
       productData.append("description", description);
       productData.append("price", price);
       productData.append("quantity", quantity);
-      productData.append("category", category);
+      productData.append("category", category._id);
       photo && productData.append("photo", photo);
 
       const { data } = await API.put(
-        `api/v1/product//update-product/${id}`,
+        `api/v1/product//update-product/${category}`,
         productData
       );
       console.log(productData);

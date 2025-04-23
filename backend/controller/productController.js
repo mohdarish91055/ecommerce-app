@@ -1,7 +1,6 @@
 import slugify from "slugify";
 import productModel from "../model/productModel.js";
 import fs, { rmSync } from "fs";
-import { error } from "console";
 import categoryModel from "../model/categoryModel.js";
 import dotenv from "dotenv";
 

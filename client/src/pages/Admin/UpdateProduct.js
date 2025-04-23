@@ -76,9 +76,11 @@ const UpdateProduct = () => {
       photo && productData.append("photo", photo);
 
       const { data } = await API.put(
-        `/api/v1/product/update-product/${id}`,
+        `api/v1/product/updateupdate-product/${id}`,
         productData
       );
+      console.log(productData);
+      console.log(data);
       if (data?.success) {
         toast.success("Product Updated Successfully");
         navigate("/dashboard/admin/products");

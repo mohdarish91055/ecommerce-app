@@ -27,7 +27,7 @@ function Orders() {
     try {
       const { data } = await API.put(
         `/api/v1/orders/cancel-order/${orderId}`,
-        null,
+
         {
           headers: {
             Authorization: `Bearer ${auth.token}`,

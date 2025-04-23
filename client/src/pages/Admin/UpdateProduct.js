@@ -72,11 +72,11 @@ const UpdateProduct = () => {
       productData.append("description", description);
       productData.append("price", price);
       productData.append("quantity", quantity);
-      productData.append("category", category._id);
+      productData.append("category", category);
       photo && productData.append("photo", photo);
 
       const { data } = await API.put(
-        `api/v1/product//update-product/${category}`,
+        `api/v1/product//update-product/${id}`,
         productData
       );
       console.log(productData);
@@ -125,8 +125,8 @@ const UpdateProduct = () => {
                 size="large"
                 showSearch
                 className="form-select mb-3"
-                onChange={(value) => setCategory(value)} // Use category _id as value
-                value={category} // Keep the selected category _id in the state
+                onChange={(value) => setCategory(value)}
+                value={category.name}
               >
                 {categories?.map((c) => (
                   <Option key={c._id} value={c._id}>
@@ -138,13 +138,12 @@ const UpdateProduct = () => {
               <div className="mb-3">
                 <label className="btn btn-outline-secondary col-md-12">
                   {photo ? photo.name : "Upload Photo"}{" "}
-                  {/* Display file name if selected, otherwise show default text */}
                   <input
                     type="file"
                     name="photo"
                     accept="image/*"
-                    onChange={(e) => setPhoto(e.target.files[0])} // Update state with selected file
-                    hidden // Hide the input element itself
+                    onChange={(e) => setPhoto(e.target.files[0])}
+                    hidden
                   />
                 </label>
               </div>

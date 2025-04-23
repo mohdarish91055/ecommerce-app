@@ -17,8 +17,6 @@ app.use(
       "https://ecommerce-app-1-lf5q.onrender.com",
     ],
     credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
-    optionsSuccessStatus: 200,
   })
 );
 

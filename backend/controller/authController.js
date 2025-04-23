@@ -332,7 +332,7 @@ export const cancelOrder = async (req, res) => {
         .json({ message: "Delivered orders cannot be canceled" });
     }
 
-    order.status = "Canceled";
+    order.status = "Cancel";
     await order.save();
 
     res.status(200).json({ message: "Order canceled successfully", order });

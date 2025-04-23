@@ -3,6 +3,7 @@ import Layout from "../../components/Layout/Layout";
 import UserMenu from "../../components/Layout/UserMenu";
 import { useAuth } from "../../context/auth";
 import API from "../../api/api";
+import { toast } from "react-toastify";
 
 function Orders() {
   const [orders, setOrders] = useState([]);

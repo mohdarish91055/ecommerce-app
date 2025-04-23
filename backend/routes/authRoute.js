@@ -10,6 +10,7 @@ import {
   orderStatusController,
   placeOrderController,
   getAllUsers,
+  cancelOrder,
 } from "../controller/authController.js";
 import { isAdmin, requireSignIn } from "../middleware/authMiddleware.js";
 
@@ -61,5 +62,8 @@ router.put(
 
 //all user get for admin
 router.get("/all-users", requireSignIn, isAdmin, getAllUsers);
+
+//cancel order
+router.put("/cancel-order/:orderId", cancelOrder);
 
 export default router;

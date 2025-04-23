@@ -22,7 +22,24 @@ function Orders() {
     if (auth?.token) getOrders();
   }, [auth?.token]);
 
-  const handleCancelOrder = () => {};
+  const handleCancelOrder = async (orderId) => {
+    try {
+      const { data } = await API.put(
+        `/api/v1/orders/cancel-order/${orderId}`,
+        null,
+        {
+          headers: {
+            Authorization: `Bearer ${auth.token}`,
+          },
+        }
+      );
+      toast.success(data.message); // Show success message
+      getOrders();
+    } catch (error) {
+      console.log("cancel order", error);
+      toast.error("Error canceling order");
+    }
+  };
 
   return (
     <Layout title={"your orders"}>

@@ -315,3 +315,28 @@ export const getAllUsers = async (req, res) => {
     });
   }
 };
+
+//cancel the order
+export const cancelOrder = async (req, res) => {
+  const { orderId } = req.params;
+  try {
+    const order = await orderModel.findById(orderId);
+
+    if (!order) {
+      return res.status(404).json({ message: "Order not found" });
+    }
+
+    if (order.status === "Delivered") {
+      return res
+        .status(400)
+        .json({ message: "Delivered orders cannot be canceled" });
+    }
+
+    order.status = "Canceled";
+    await order.save();
+
+    res.status(200).json({ message: "Order canceled successfully", order });
+  } catch (error) {
+    console.log("order controller", error);
+  }
+};

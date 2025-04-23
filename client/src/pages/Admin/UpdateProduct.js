@@ -33,7 +33,7 @@ const UpdateProduct = () => {
       setPrice(data.product.price);
       setQuantity(data.product.quantity);
       setShipping(data.product.shipping);
-      setCategory(data.product.category);
+      setCategory(data.product.category._id);
     } catch (error) {
       console.log(error);
     }
@@ -72,7 +72,7 @@ const UpdateProduct = () => {
       productData.append("description", description);
       productData.append("price", price);
       productData.append("quantity", quantity);
-      productData.append("category", category._id);
+      productData.append("category", category);
       photo && productData.append("photo", photo);
       const { data } = await API.put(
         `/api/v1/product/update-product/${id}`,
@@ -232,7 +232,7 @@ const UpdateProduct = () => {
                 </Select>
               </div>
               <div className="mb-3">
-                <button className="btn btn-primary" onClick={handleUpdate}>
+                <button className="btn btn-primary mb-2" onClick={handleUpdate}>
                   UPDATE PRODUCT
                 </button>
                 <button className="btn btn-danger ms-3" onClick={handleDelete}>

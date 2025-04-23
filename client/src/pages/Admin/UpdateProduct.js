@@ -50,8 +50,6 @@ const UpdateProduct = () => {
       const { data } = await API.get(`/api/v1/category/get-category`);
       if (data.success) {
         setCategories(data.category);
-        console.log(data.category);
-        console.log(categories[0].name);
       }
     } catch (error) {
       console.log(error);
@@ -81,10 +79,10 @@ const UpdateProduct = () => {
         productData
       );
       if (data?.success) {
-        toast.error(data.message);
-        console.log(category);
-      } else {
         toast.success("Product Updated Successfully");
+        navigate("/dashboard/admin/products");
+      } else {
+        toast.error(data.message || "Update failed");
       }
     } catch (error) {
       console.log(error);
@@ -125,13 +123,11 @@ const UpdateProduct = () => {
                 showSearch
                 className="form-select mb-3"
                 onChange={(value) => setCategory(value)} // Use category _id as value
-                value={category.name} // Keep the selected category _id in the state
+                value={category} // Keep the selected category _id in the state
               >
                 {categories?.map((c) => (
                   <Option key={c._id} value={c._id}>
-                    {" "}
-                    {/* Use _id as the value */}
-                    {c.name} {/* Display category name */}
+                    {c.name}
                   </Option>
                 ))}
               </Select>

@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import Layout from "../../components/Layout/Layout";
 import { toast } from "react-toastify";
-import axios from "axios";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../../context/auth";
+import API from "../../api/api";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -17,10 +17,7 @@ const Login = () => {
     e.preventDefault();
 
     try {
-      const res = await axios.post(
-        `${process.env.REACT_APP_API}/api/v1/auth/login`,
-        { email, password }
-      );
+      const res = await API.post(`/api/v1/auth/login`, { email, password });
 
       //login successfully
       if (res.data.success) {

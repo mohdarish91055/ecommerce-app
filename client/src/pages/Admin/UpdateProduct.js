@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import Layout from "../../components/Layout/Layout";
 import AdminMenu from "../../components/Layout/AdminMenu";
 import { toast } from "react-toastify";
-import axios from "axios";
 import { Select, Typography } from "antd";
 import { floatButtonPrefixCls } from "antd/es/float-button/FloatButton";
 import { useNavigate, useParams } from "react-router-dom";
@@ -25,8 +24,8 @@ const UpdateProduct = () => {
   //get single product
   const getSingleProduct = async () => {
     try {
-      const { data } = await axios.get(
-        `${process.env.REACT_APP_API}/api/v1/product/get-product/${params.slug}`
+      const { data } = await API.get(
+        `/api/v1/product/get-product/${params.slug}`
       );
       setName(data.product.name);
       setDescription(data.product.description);
@@ -48,9 +47,7 @@ const UpdateProduct = () => {
   //get all category
   const getAllCategory = async () => {
     try {
-      const { data } = await axios.get(
-        `${process.env.REACT_APP_API}/api/v1/category/get-category`
-      );
+      const { data } = await API.get(`/api/v1/category/get-category`);
       if (data.success) {
         setCategories(data.category);
         console.log(data.category);
@@ -86,7 +83,6 @@ const UpdateProduct = () => {
       if (data?.success) {
         toast.error(data.message);
         console.log(category);
-        console.log(name);
       } else {
         toast.success("Product Updated Successfully");
       }

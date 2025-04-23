@@ -3,7 +3,6 @@ import Layout from "../../components/Layout/Layout";
 import AdminMenu from "../../components/Layout/AdminMenu";
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
-import axios from "axios";
 import CategoryForm from "../../components/Form/CategoryForm";
 import { Modal } from "antd";
 import API from "../../api/api";

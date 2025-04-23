@@ -74,6 +74,7 @@ const UpdateProduct = () => {
       productData.append("quantity", quantity);
       productData.append("category", category);
       photo && productData.append("photo", photo);
+
       const { data } = await API.put(
         `/api/v1/product/update-product/${id}`,
         productData
@@ -235,7 +236,7 @@ const UpdateProduct = () => {
                 <button className="btn btn-primary mb-2" onClick={handleUpdate}>
                   UPDATE PRODUCT
                 </button>
-                <button className="btn btn-danger ms-3" onClick={handleDelete}>
+                <button className="btn btn-danger ms-2" onClick={handleDelete}>
                   DELETE PRODUCT
                 </button>
               </div>

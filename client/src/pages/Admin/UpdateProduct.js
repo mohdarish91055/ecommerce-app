@@ -33,7 +33,7 @@ const UpdateProduct = () => {
       setPrice(data.product.price);
       setQuantity(data.product.quantity);
       setShipping(data.product.shipping);
-      setCategory(data.product.category._id);
+      setCategory(data.product.category);
     } catch (error) {
       console.log(error);
     }
@@ -77,7 +77,12 @@ const UpdateProduct = () => {
 
       const { data } = await API.put(
         `api/v1/product/update-product/${id}`,
-        productData
+        productData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
       );
       console.log(productData);
       console.log(data);
@@ -137,7 +142,7 @@ const UpdateProduct = () => {
 
               <div className="mb-3">
                 <label className="btn btn-outline-secondary col-md-12">
-                  {photo ? photo.name : "Upload Photo"}{" "}
+                  {photo ? photo.name : "Upload Photo"}
                   <input
                     type="file"
                     name="photo"

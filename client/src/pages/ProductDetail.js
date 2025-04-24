@@ -91,7 +91,7 @@ const ProductDetail = () => {
       <div className="row container mt-3">
         <div className="col-md-6">
           <img
-            src={`${process.env.REACT_APP_API_URL}api/v1/product/product-photo/${product._id}`}
+            src={`${process.env.REACT_APP_API_URL}/api/v1/product/product-photo/${product._id}`}
             className="card-img-top"
             alt={product.name}
             height={"400px"}

@@ -73,6 +73,7 @@ const CheckoutPage = () => {
                   value="online"
                   checked={paymentMethod === "online"}
                   onChange={(e) => setPaymentMethod(e.target.value)}
+                  disabled
                 />
                 <label className="form-check-label">
                   Online Payment (Coming Soon)

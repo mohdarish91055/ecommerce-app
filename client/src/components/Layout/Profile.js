@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import Layout from "./Layout";
 import UserMenu from "./UserMenu";
 import { useAuth } from "../../context/auth";
-import api from "../../api/api.js";
 import { toast } from "react-toastify";
+import API from "../../api/api.js";
 
 const Profile = () => {
   //context
@@ -19,7 +19,7 @@ const Profile = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const { data } = await api.put(`/api/v1/auth/profile`, {
+      const { data } = await API.put(`/api/v1/auth/profile`, {
         name,
         email,
         password,

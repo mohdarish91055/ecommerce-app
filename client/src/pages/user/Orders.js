@@ -13,7 +13,6 @@ function Orders() {
     try {
       const { data } = await API.get(`/api/v1/auth/orders`);
       setOrders(data);
-      console.log(data);
     } catch (error) {
       console.log(error);
     }
@@ -79,7 +78,7 @@ function Orders() {
                         <div className="row mb-2 p-3 card flex-row">
                           <div className="col-md-4">
                             <img
-                              src={`${process.env.REACT_APP_API}/api/v1/product/product-photo/${p._id}`}
+                              src={`${process.env.REACT_APP_API_URL}/api/v1/product/product-photo/${p._id}`}
                               className="card-img-top"
                               alt={p.name}
                               width="100px"
@@ -94,12 +93,15 @@ function Orders() {
                                 <button
                                   className="btn btn-danger btn-sm"
                                   onClick={() => handleCancelOrder(o._id)}
+                                  disabled={
+                                    o?.status === "Cancel" ||
+                                    o?.status === "delivered"
+                                  }
                                 >
                                   Cancel Order
                                 </button>
                               )}
                             </p>
-                            <p>hhhh {p.status}</p>
                           </div>
                         </div>
                       ))}

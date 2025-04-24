@@ -108,7 +108,7 @@ const AdminOrder = () => {
                       <div className="row mb-2 p-3 card flex-row">
                         <div className="col-md-4">
                           <img
-                            src={`${process.env.REACT_APP_API}/api/v1/product/product-photo/${p._id}`}
+                            src={`${process.env.REACT_APP_API_URL}/api/v1/product/product-photo/${p._id}`}
                             className="card-img-top"
                             alt={p.name}
                             width="100px"
@@ -117,7 +117,6 @@ const AdminOrder = () => {
                         </div>
                         <div className="col-md-8">
                           <p>{p.name}</p>
-                          <p>{p.description.substring(0, 30)}</p>
                           <p>Price : {p.price}</p>
                         </div>
                       </div>

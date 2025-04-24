@@ -16,18 +16,6 @@ const ProductDetail = () => {
   const [auth, setAuth] = useAuth();
   const navigate = useNavigate();
 
-  // Handle Add to Cart
-  // const handleAddToCart = (product) => {
-  // if (!auth?.user) {
-  //   toast.error("Please log in to add items to your cart");
-  //   navigate("/login");
-  //   return;
-  // }
-  // setCart([...cart, product]);
-  // localStorage.setItem("cart", JSON.stringify([...cart, product]));
-  // toast.success("Item added to cart");
-  // };
-
   const handleAddToCart = async (product) => {
     const cartItem = { ...product, userId: auth.user._id }; // assuming `_id` is user id
 
@@ -74,8 +62,8 @@ const ProductDetail = () => {
   //get product
   const getProduct = async () => {
     try {
-      const { data } = await axios.get(
-        `${process.env.REACT_APP_API}/api/v1/product/get-product/${params.slug}`
+      const { data } = await API.get(
+        `/api/v1/product/get-product/${params.slug}`
       );
       setProuduct(data?.product);
 
@@ -88,8 +76,8 @@ const ProductDetail = () => {
   //get similar product
   const getSimilarProduct = async (pid, cid) => {
     try {
-      const { data } = await axios.get(
-        `${process.env.REACT_APP_API}/api/v1/product/related-product/${pid}/${cid}`
+      const { data } = await API.get(
+        `/api/v1/product/related-product/${pid}/${cid}`
       );
       setRelatedProduct(data?.products);
       console.log(reltedProduct);
@@ -103,7 +91,7 @@ const ProductDetail = () => {
       <div className="row container mt-3">
         <div className="col-md-6">
           <img
-            src={`${process.env.REACT_APP_API}/api/v1/product/product-photo/${product._id}`}
+            src={`${process.env.REACT_APP_API_URL}/api/v1/product/product-photo/${product._id}`}
             className="card-img-top"
             alt={product.name}
             height={"400px"}

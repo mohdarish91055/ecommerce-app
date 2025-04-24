@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import Layout from "../../components/Layout/Layout";
 import AdminMenu from "../../components/Layout/AdminMenu";
 import { toast } from "react-toastify";
-import axios from "axios";
 import { Select, Typography } from "antd";
 import { floatButtonPrefixCls } from "antd/es/float-button/FloatButton";
 import { useNavigate, useParams } from "react-router-dom";
@@ -51,14 +50,12 @@ const UpdateProduct = () => {
   const getAllCategory = async () => {
     try {
       const { data } = await API.get(`/api/v1/category/get-category`);
+
       if (data.success) {
         setCategories(data.category);
-        console.log(data.category);
-        console.log(categories[0].name);
       }
     } catch (error) {
       console.log(error);
-      toast.error("something went worng in getting category");
     }
   };
 
@@ -83,12 +80,11 @@ const UpdateProduct = () => {
         `/api/v1/product/update-product/${id}`,
         productData
       );
-      if (data?.success) {
-        toast.error(data.message);
-        console.log(category);
-        console.log(name);
+      console.log(data);
+      if (data.success) {
+        toast.success(data.message);
       } else {
-        toast.success("Product Updated Successfully");
+        toast.error(data.message);
       }
     } catch (error) {
       console.log(error);
@@ -167,7 +163,7 @@ const UpdateProduct = () => {
                 ) : (
                   <div className="text-center">
                     <img
-                      src={`${process.env.REACT_APP_API}/api/v1/product/product-photo/${id}`}
+                      src={`${process.env.REACT_APP_API_URL}/api/v1/product/product-photo/${id}`}
                       alt="product photo"
                       height={"200px"}
                       className="img img-responsive"

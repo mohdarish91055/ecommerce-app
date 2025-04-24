@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Layout from "../../components/Layout/Layout";
 import { toast } from "react-toastify";
-import api from "../../api/api.js";
+import API from "../../api/api";
 import { useNavigate } from "react-router-dom";
 
 const Register = () => {
@@ -76,7 +76,7 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await api.post(`/api/v1/auth/register`, formData);
+      const res = await API.post(`/api/v1/auth/register`, formData);
       if (res.data.success) {
         toast.success(res.data.message);
         navigate("/login");

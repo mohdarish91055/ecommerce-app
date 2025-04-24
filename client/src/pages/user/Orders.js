@@ -7,20 +7,20 @@ import { toast } from "react-toastify";
 
 function Orders() {
   const [orders, setOrders] = useState([]);
-  const [auth, setAuth] = useAuth();
+  const [auth] = useAuth();
 
   const getOrders = async () => {
     try {
-      const { data } = await API.get(`/api/v1/auth/orders`);
+      const { data } = await API.get(`/api/v1/auth/orders`, {
+        headers: {
+          Authorization: `Bearer ${auth.token}`,
+        },
+      });
       setOrders(data);
     } catch (error) {
       console.log(error);
     }
   };
-
-  useEffect(() => {
-    if (auth?.token) getOrders();
-  }, [auth?.token]);
 
   const handleCancelOrder = async (orderId) => {
     try {
@@ -33,7 +33,7 @@ function Orders() {
           },
         }
       );
-      toast.success(data.message); // Show success message
+      toast.success(data.message);
       getOrders();
     } catch (error) {
       console.log("cancel order", error);
@@ -41,75 +41,82 @@ function Orders() {
     }
   };
 
+  useEffect(() => {
+    if (auth?.token) getOrders();
+  }, [auth?.token]);
+
   return (
-    <Layout title={"your orders"}>
-      <div className="container-flui p-3 m-3">
+    <Layout title={"Your Orders"}>
+      <div className="container-fluid p-3 m-3">
         <div className="row">
           <div className="col-md-3">
             <UserMenu />
           </div>
           <div className="col-md-9">
             <h1>All Orders</h1>
-            {orders?.map((o, i) => {
-              return (
-                <div className="border shadow">
-                  <div className="table">
+            {orders?.length === 0 ? (
+              <p>No orders found.</p>
+            ) : (
+              orders?.map((o, i) => (
+                <div key={o._id} className="card mb-4 p-3 shadow-sm">
+                  <h5>Order #{i + 1}</h5>
+                  <table className="table">
                     <thead>
                       <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Status</th>
-                        <th scope="col">Buyer</th>
-                        <th scope="col">Payment</th>
-                        <th scope="col">Quantity</th>
+                        <th>Status</th>
+                        <th>Buyer</th>
+                        <th>Payment</th>
+                        <th>Quantity</th>
                       </tr>
                     </thead>
                     <tbody>
                       <tr>
-                        <td>{i + 1}</td>
                         <td>{o?.status}</td>
                         <td>{o?.buyer?.name}</td>
-                        <td>{o?.payment.method ? "Cash on Delivery" : ""}</td>
+                        <td>
+                          {o?.payment?.method ? "Cash on Delivery" : "Online"}
+                        </td>
                         <td>{o?.products?.length}</td>
                       </tr>
                     </tbody>
+                  </table>
 
-                    <div className="container">
-                      {o?.products.map((p) => (
-                        <div className="row mb-2 p-3 card flex-row">
-                          <div className="col-md-4">
-                            <img
-                              src={`${process.env.REACT_APP_API_URL}api/v1/product/product-photo/${p._id}`}
-                              className="card-img-top"
-                              alt={p.name}
-                              width="100px"
-                              height={"100px"}
-                            />
-                          </div>
-                          <div className="col-md-8">
-                            <p>{p.name}</p>
-                            <p>Price : {p.price}</p>
-                            <p>
-                              {p?.status !== "Delivered" && (
-                                <button
-                                  className="btn btn-danger btn-sm"
-                                  onClick={() => handleCancelOrder(o._id)}
-                                  disabled={
-                                    o?.status === "Cancel" ||
-                                    o?.status === "delivered"
-                                  }
-                                >
-                                  Cancel Order
-                                </button>
-                              )}
+                  <div className="row">
+                    {o?.products.map((p) => (
+                      <div key={p._id} className="col-md-6 mb-3">
+                        <div className="card p-2 d-flex flex-row align-items-center">
+                          <img
+                            src={`${process.env.REACT_APP_API_URL}api/v1/product/product-photo/${p._id}`}
+                            className="img-fluid me-3"
+                            alt={p.name}
+                            width="100"
+                            height="100"
+                          />
+                          <div>
+                            <p className="mb-1">
+                              <strong>{p.name}</strong>
                             </p>
+                            <p className="mb-1">Price: ₹{p.price}</p>
+                            {o?.status !== "Delivered" && (
+                              <button
+                                className="btn btn-danger btn-sm mt-1"
+                                onClick={() => handleCancelOrder(o._id)}
+                                disabled={
+                                  o?.status === "Cancel" ||
+                                  o?.status === "Delivered"
+                                }
+                              >
+                                Cancel Order
+                              </button>
+                            )}
                           </div>
                         </div>
-                      ))}
-                    </div>
+                      </div>
+                    ))}
                   </div>
                 </div>
-              );
-            })}
+              ))
+            )}
           </div>
         </div>
       </div>

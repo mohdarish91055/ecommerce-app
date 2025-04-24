@@ -57,7 +57,7 @@ function Orders() {
             {orders?.length === 0 ? (
               <p>No orders found.</p>
             ) : (
-              orders?.map((o, i) => (
+              orders.map((o, i) => (
                 <div key={o._id} className="card mb-4 p-3 shadow-sm">
                   <h5>Order #{i + 1}</h5>
                   <table className="table">
@@ -71,22 +71,26 @@ function Orders() {
                     </thead>
                     <tbody>
                       <tr>
-                        <td>{o?.status}</td>
-                        <td>{o?.buyer?.name}</td>
+                        <td>{o.status}</td>
+                        <td>{o.buyer?.name}</td>
                         <td>
-                          {o?.payment?.method ? "Cash on Delivery" : "Online"}
+                          {o.payment?.method ? "Cash on Delivery" : "Online"}
                         </td>
-                        <td>{o?.products?.length}</td>
+                        <td>{o.products?.length}</td>
                       </tr>
                     </tbody>
                   </table>
 
                   <div className="row">
-                    {o?.products.map((p) => (
-                      <div key={p._id} className="col-md-6 mb-3">
+                    {o.products.map((p, index) => (
+                      <div key={index} className="col-md-6 mb-3">
                         <div className="card p-2 d-flex flex-row align-items-center">
                           <img
-                            src={`${process.env.REACT_APP_API_URL}api/v1/product/product-photo/${p._id}`}
+                            src={`${
+                              process.env.REACT_APP_API_URL
+                            }api/v1/product/product-photo/${
+                              p.product?._id || p._id
+                            }`}
                             className="img-fluid me-3"
                             alt={p.name}
                             width="100"
@@ -94,24 +98,23 @@ function Orders() {
                           />
                           <div>
                             <p className="mb-1">
-                              <strong>{p.name}</strong>
+                              <strong>{p.name || p.product?.name}</strong>
                             </p>
                             <p className="mb-1">Price: ₹{p.price}</p>
-                            {p?.status !== "Cancelled" && (
-                              <button
-                                className="btn btn-danger btn-sm mt-1"
-                                onClick={() =>
-                                  handleCancelProduct(o._id, p._id)
-                                }
-                              >
-                                Cancel Product
-                              </button>
-                            )}
-                            {p?.status === "Cancelled" && (
-                              <span className="badge bg-secondary mt-1">
-                                Cancelled
-                              </span>
-                            )}
+                            <p className="mb-1 text-muted">
+                              Status: {p.status}
+                            </p>
+                            {p.status !== "Cancelled" &&
+                              o.status !== "Delivered" && (
+                                <button
+                                  className="btn btn-danger btn-sm mt-1"
+                                  onClick={() =>
+                                    handleCancelProduct(o._id, p.product?._id)
+                                  }
+                                >
+                                  Cancel Item
+                                </button>
+                              )}
                           </div>
                         </div>
                       </div>

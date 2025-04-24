@@ -11,7 +11,7 @@ const SearchInput = (e) => {
     e.preventDefault();
     try {
       const { data } = await API.get(
-        `${process.env.REACT_APP_API_URL}/api/v1/product/search/${values.keyword}`
+        `/api/v1/product/search/${values.keyword}`
       );
       setValues({ ...values, results: data });
       navigate("/search");

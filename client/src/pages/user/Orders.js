@@ -22,10 +22,10 @@ function Orders() {
     }
   };
 
-  const handleCancelOrder = async (orderId) => {
+  const handleCancelProduct = async (orderId, productId) => {
     try {
       const { data } = await API.put(
-        `/api/v1/auth/cancel-order/${orderId}`,
+        `/api/v1/auth/cancel-product/${orderId}/${productId}`,
         {},
         {
           headers: {
@@ -36,8 +36,8 @@ function Orders() {
       toast.success(data.message);
       getOrders();
     } catch (error) {
-      console.log("cancel order", error);
-      toast.error("Error canceling order");
+      console.log("cancel product", error);
+      toast.error("Error canceling product");
     }
   };
 
@@ -97,17 +97,20 @@ function Orders() {
                               <strong>{p.name}</strong>
                             </p>
                             <p className="mb-1">Price: ₹{p.price}</p>
-                            {o?.status !== "Delivered" && (
+                            {p?.status !== "Cancelled" && (
                               <button
                                 className="btn btn-danger btn-sm mt-1"
-                                onClick={() => handleCancelOrder(o._id)}
-                                disabled={
-                                  o?.status === "Cancel" ||
-                                  o?.status === "Delivered"
+                                onClick={() =>
+                                  handleCancelProduct(o._id, p._id)
                                 }
                               >
-                                Cancel Order
+                                Cancel Product
                               </button>
+                            )}
+                            {p?.status === "Cancelled" && (
+                              <span className="badge bg-secondary mt-1">
+                                Cancelled
+                              </span>
                             )}
                           </div>
                         </div>

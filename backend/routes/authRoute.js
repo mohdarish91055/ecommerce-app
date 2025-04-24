@@ -64,6 +64,6 @@ router.put(
 router.get("/all-users", requireSignIn, isAdmin, getAllUsers);
 
 //cancel order
-router.put("/cancel-order/:orderId", cancelOrder);
+router.put("/cancel-product/:orderId/:productId", requireSignIn, cancelOrder);
 
 export default router;

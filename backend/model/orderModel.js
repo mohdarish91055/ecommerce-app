@@ -4,15 +4,8 @@ const orderSchema = new mongoose.Schema(
   {
     products: [
       {
-        product: {
-          type: mongoose.ObjectId,
-          ref: "Products",
-        },
-        status: {
-          type: String,
-          default: "Ordered",
-          enum: ["Ordered", "Cancelled", "Delivered"],
-        },
+        type: mongoose.ObjectId,
+        ref: "Products",
       },
     ],
     payment: {},

@@ -1,4 +1,3 @@
-import { compare } from "bcrypt";
 import userModel from "../model/userModel.js";
 import { comparePassword, hashPassword } from "./../helper/authHelper.js";
 import JWT from "jsonwebtoken";

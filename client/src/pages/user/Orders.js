@@ -98,7 +98,7 @@ function Orders() {
                                     o?.status === "delivered"
                                   }
                                 >
-                                  Cancel Order
+                                  {console.log("cancel", o)} Cancel Order
                                 </button>
                               )}
                             </p>

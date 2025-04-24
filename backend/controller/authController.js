@@ -318,30 +318,25 @@ export const getAllUsers = async (req, res) => {
 
 //cancel the order
 export const cancelOrder = async (req, res) => {
+  const { orderId } = req.params;
   try {
-    const { orderId, productId } = req.params;
-
     const order = await orderModel.findById(orderId);
-    if (!order) return res.status(404).send({ message: "Order not found" });
 
-    // Find and update product status
-    let updated = false;
-    order.products = order.products.map((product) => {
-      if (product._id.toString() === productId) {
-        product.status = "Cancelled";
-        updated = true;
-      }
-      return product;
-    });
-
-    if (!updated) {
-      return res.status(404).send({ message: "Product not found in order" });
+    if (!order) {
+      return res.status(404).json({ message: "Order not found" });
     }
 
+    if (order.status === "Delivered") {
+      return res
+        .status(400)
+        .json({ message: "Delivered orders cannot be canceled" });
+    }
+
+    order.status = "Cancel";
     await order.save();
-    res.status(200).send({ success: true, message: "Product cancelled successfully" });
+
+    res.status(200).json({ message: "Order canceled successfully", order });
   } catch (error) {
-    console.log(error);
-    res.status(500).send({ success: false, message: "Error cancelling product", error });
+    console.log("order controller", error);
   }
 };

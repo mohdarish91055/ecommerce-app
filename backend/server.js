@@ -12,10 +12,7 @@ import cartRoute from "./routes/cartRoute.js";
 const app = express();
 app.use(
   cors({
-    origin: [
-      "http://localhost:3000",
-      "https://ecommerce-app-1-7obg.onrender.com",
-    ],
+    origin: ["*"],
     credentials: true,
   })
 );

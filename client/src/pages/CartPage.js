@@ -71,7 +71,7 @@ const CartPage = () => {
                   className="card mb-2 p-2 d-flex flex-row"
                 >
                   <img
-                    src={`${process.env.REACT_APP_API_URL}api/v1/product/product-photo/${product._id}`}
+                    src={`${process.env.REACT_APP_API_URL}/api/v1/product/product-photo/${product._id}`}
                     alt={product.name}
                     style={{ width: 100, height: 100, objectFit: "cover" }}
                   />

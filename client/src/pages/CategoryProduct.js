@@ -3,12 +3,17 @@ import Layout from "../components/Layout/Layout";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import API from "../api/api";
+import { useAuth } from "../context/auth";
+import { useCart } from "../context/cart";
+import { toast } from "react-toastify";
 
 const CategoryProduct = () => {
   const navigate = useNavigate();
   const params = useParams();
   const [products, setProducts] = useState([]);
   const [category, setCategory] = useState([]);
+  const [cart, setCart] = useCart();
+  const [auth, setAuth] = useAuth();
 
   const handleAddToCart = async (product) => {
     const cartItem = { ...product, userId: auth.user._id }; // assuming `_id` is user id

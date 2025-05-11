@@ -10,6 +10,44 @@ const CategoryProduct = () => {
   const [products, setProducts] = useState([]);
   const [category, setCategory] = useState([]);
 
+  const handleAddToCart = async (product) => {
+    const cartItem = { ...product, userId: auth.user._id }; // assuming `_id` is user id
+
+    // Update local cart first (UX improvement)
+    const updatedCart = [...cart, cartItem];
+
+    if (!auth?.user) {
+      toast.error("Please log in to add items to your cart");
+      navigate("/login");
+      setCart(updatedCart);
+      localStorage.setItem("cart", JSON.stringify(updatedCart));
+      toast.success("Item added to cart");
+
+      return;
+    }
+
+    try {
+      // Save to backend
+      const { data } = await API.post(
+        `/api/v1/cart/add`,
+        {
+          productId: product._id,
+          quantity: 1,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${auth?.token}`,
+          },
+        }
+      );
+
+      toast.success("Add to cart");
+    } catch (error) {
+      console.log("Error saving cart item to backend:", error);
+      toast.error("Could not sync cart with server");
+    }
+  };
+
   useEffect(() => {
     if (params?.slug) getProductByCat();
   }, [params?.slug]);
@@ -39,6 +77,12 @@ const CategoryProduct = () => {
                   src={`${process.env.REACT_APP_API_URL}/api/v1/product/product-photo/${p._id}`}
                   className="card-img-top"
                   alt={p.name}
+                  style={{
+                    width: "100%",
+                    height: "auto",
+                    maxHeight: "250px",
+                    objectFit: "cover",
+                  }}
                 />
                 <div className="card-body">
                   <h5 className="card-title">{p.name}</h5>
@@ -51,7 +95,11 @@ const CategoryProduct = () => {
                   >
                     More Details
                   </button>
-                  <button href="#" className="btn btn-secondary ms-1">
+                  <button
+                    href="#"
+                    className="btn btn-secondary ms-1"
+                    onClick={() => handleAddToCart(p)}
+                  >
                     Add to cart
                   </button>
                 </div>
